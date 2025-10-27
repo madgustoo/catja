@@ -4,42 +4,6 @@
 [ext_resource type="Script" uid="uid://dr0r6d5ha5tqf" path="res://balloon.gd" id="1_r345k"]
 [ext_resource type="AudioStream" uid="uid://b61h6r5tj6my" path="res://assets/sounds/pop.wav" id="3_4emby"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_r345k"]
-atlas = ExtResource("1_n2rxu")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4emby"]
-atlas = ExtResource("1_n2rxu")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jj3vs"]
-atlas = ExtResource("1_n2rxu")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wxbh2"]
-atlas = ExtResource("1_n2rxu")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_mv2x6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r345k")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4emby")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jj3vs")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wxbh2")
-}],
-"loop": true,
-"name": &"dance",
-"speed": 5.0
-}]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_n2rxu"]
 
 [sub_resource type="Animation" id="Animation_r345k"]
@@ -85,7 +49,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("FloatMotion/AnimatedSprite2D:visible")
+tracks/3/path = NodePath("AnimatedSprite2D:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -124,7 +88,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("FloatMotion/AnimatedSprite2D:visible")
+tracks/2/path = NodePath("AnimatedSprite2D:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -133,34 +97,10 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("FloatMotion:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_jj3vs"]
 resource_name = "up_and_down"
 loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FloatMotion:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -2)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4emby"]
 _data = {
@@ -169,16 +109,45 @@ _data = {
 &"up_and_down": SubResource("Animation_jj3vs")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_r345k"]
+atlas = ExtResource("1_n2rxu")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4emby"]
+atlas = ExtResource("1_n2rxu")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jj3vs"]
+atlas = ExtResource("1_n2rxu")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxbh2"]
+atlas = ExtResource("1_n2rxu")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mv2x6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r345k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4emby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jj3vs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wxbh2")
+}],
+"loop": true,
+"name": &"dance",
+"speed": 5.0
+}]
+
 [node name="Balloon" type="Area2D"]
 collision_layer = 2
 script = ExtResource("1_r345k")
-
-[node name="FloatMotion" type="Node2D" parent="."]
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="FloatMotion"]
-sprite_frames = SubResource("SpriteFrames_mv2x6")
-animation = &"dance"
-autoplay = "dance"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -9)
@@ -197,6 +166,11 @@ stream = ExtResource("3_4emby")
 bus = &"Sound effects"
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mv2x6")
+animation = &"dance"
+autoplay = "dance"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

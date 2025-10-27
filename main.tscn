@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://c14x4qnf2i71x"]
+[gd_scene load_steps=21 format=4 uid="uid://c14x4qnf2i71x"]
 
 [ext_resource type="PackedScene" uid="uid://c2ow84qxmy37a" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://k0solj80n08i" path="res://assets/sprites/platformIndustrial_sheet.png" id="2_h2yge"]
@@ -1642,6 +1642,43 @@ physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_lquwl")
 sources/1 = SubResource("TileSetAtlasSource_7mycd")
 
+[sub_resource type="Animation" id="Animation_4c57u"]
+resource_name = "up_and_down"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Balloon2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(181, -220), Vector2(181, -211)]
+}
+
+[sub_resource type="Animation" id="Animation_efxa6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Balloon2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(181, -220)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_efxa6"]
+_data = {
+&"RESET": SubResource("Animation_efxa6"),
+&"up_and_down": SubResource("Animation_4c57u")
+}
+
 [node name="Game" type="Node2D"]
 
 [node name="GameManager" type="Node" parent="."]
@@ -1757,8 +1794,18 @@ theme_override_font_sizes/font_size = 0
 text = "There has to be another way"
 autowrap_mode = 2
 
-[node name="Balloon3" parent="." instance=ExtResource("10_4c57u")]
+[node name="Balloon2" parent="." instance=ExtResource("10_4c57u")]
 position = Vector2(181, -220)
+
+[node name="BallonAnimationPlayer" type="AnimationPlayer" parent="Balloon2"]
+root_node = NodePath("../../Balloon")
+libraries = {
+&"": SubResource("AnimationLibrary_efxa6")
+}
+autoplay = "up_and_down"
 
 [node name="Balloon" parent="." instance=ExtResource("10_4c57u")]
 position = Vector2(-13, -5)
+
+[node name="Balloon3" parent="." instance=ExtResource("10_4c57u")]
+position = Vector2(24, 49)

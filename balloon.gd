@@ -9,6 +9,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		animation_player.play("pop")
 		var dir = (body.global_position - global_position).normalized()
+		# Checks if player is
 		body.bounce(-dir * bounce_force)
 		timer.start()
 

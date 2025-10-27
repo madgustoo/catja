@@ -273,3 +273,7 @@ frame_progress = 0.474429
 [node name="RayCast2D" type="RayCast2D" parent="."]
 position = Vector2(-13, -11)
 target_position = Vector2(0, 14)
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
