@@ -8,11 +8,11 @@ extends Area2D
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		animation_player.play("pop")
+		#print("Player: " + str(body.global_position))
+		#print("Balloon: " + str(global_position))
 		var dir = (body.global_position - global_position).normalized()
-		# Checks if player is
-		body.bounce(-dir * bounce_force)
+		body.bounce(dir * bounce_force)
 		timer.start()
-
 
 func _on_timer_timeout() -> void:
 	animation_player.play("RESET")
