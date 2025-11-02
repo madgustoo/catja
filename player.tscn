@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://c2ow84qxmy37a"]
+[gd_scene load_steps=51 format=3 uid="uid://c2ow84qxmy37a"]
 
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bsrqbhbmnftid" path="res://assets/sprites/player/cat05_run_strip4.png" id="3_hqtel"]
 [ext_resource type="Texture2D" uid="uid://cggn8tir85ip" path="res://assets/sprites/player/cat05_walk_strip8.png" id="3_sweqy"]
 [ext_resource type="Texture2D" uid="uid://cygvmb3ieudgp" path="res://assets/sprites/player/cat05_land_strip2.png" id="4_2hs0m"]
+[ext_resource type="Texture2D" uid="uid://b4tikeb8ihoo7" path="res://assets/sprites/player/cat05_ledgeclimb_strip11.png" id="5_dw050"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hqtel"]
 
@@ -49,6 +50,50 @@ region = Rect2(80, 0, 40, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
 region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkwlq"]
+atlas = ExtResource("5_dw050")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl5qd"]
+atlas = ExtResource("5_dw050")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ek41f"]
+atlas = ExtResource("5_dw050")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khis8"]
+atlas = ExtResource("5_dw050")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b88wv"]
+atlas = ExtResource("5_dw050")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgbbb"]
+atlas = ExtResource("5_dw050")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_331ug"]
+atlas = ExtResource("5_dw050")
+region = Rect2(240, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ny14h"]
+atlas = ExtResource("5_dw050")
+region = Rect2(280, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibah8"]
+atlas = ExtResource("5_dw050")
+region = Rect2(320, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3iwfv"]
+atlas = ExtResource("5_dw050")
+region = Rect2(360, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qwsg1"]
+atlas = ExtResource("5_dw050")
+region = Rect2(400, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
 atlas = ExtResource("3_hqtel")
@@ -174,6 +219,44 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkwlq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl5qd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ek41f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khis8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b88wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgbbb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_331ug")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ny14h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibah8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3iwfv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qwsg1")
+}],
+"loop": true,
+"name": &"ledge_climb",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 1.5,
 "texture": SubResource("AtlasTexture_sweqy")
 }, {
@@ -265,11 +348,21 @@ shape = SubResource("CircleShape2D_hqtel")
 texture_filter = 1
 position = Vector2(-13, -21)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"idle"
+animation = &"ledge_climb"
 autoplay = "idle"
-frame = 2
-frame_progress = 0.474429
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 position = Vector2(-13, -11)
 target_position = Vector2(0, 14)
+
+[node name="LedgeRayWall" type="RayCast2D" parent="." groups=["Player"]]
+position = Vector2(-11, -13)
+rotation = 0.682616
+target_position = Vector2(1.59609, -15.4743)
+collision_mask = 4
+
+[node name="LedgeRayLedge" type="RayCast2D" parent="."]
+position = Vector2(-10, -22)
+rotation = -1.5915
+target_position = Vector2(-0.227673, 10.9976)
+collision_mask = 4
