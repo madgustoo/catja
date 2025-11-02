@@ -1659,7 +1659,7 @@ text = "You have collected X coins. You can jump now"
 autowrap_mode = 2
 
 [node name="Player" parent="." instance=ExtResource("1_ig7tw")]
-position = Vector2(-393, 60)
+position = Vector2(-393, 102)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-14, -19)
