@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var camera: Camera2D = $Camera2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
+
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
 @export_range(0, 1) var decelerate_on_jump_release = 0.5
@@ -42,11 +43,34 @@ var elapsed_time = 0.0
 var original_shape_height = 0.0
 var original_shape_position = Vector2.ZERO
 
+#death safety-check
+var is_dead = false
+
 func _ready():
 	# Store original collision shape values
 	if collision_shape.shape is CapsuleShape2D:
 		original_shape_height = collision_shape.shape.height
 		original_shape_position = collision_shape.position
+
+#safety check for death (Store original collision shape values)
+	if collision_shape.shape is CapsuleShape2D:
+		original_shape_height = collision_shape.shape.height
+		original_shape_position = collision_shape.position
+		
+		add_to_group("player")
+		
+func die():
+	if is_dead:
+		return
+	is_dead = true
+	
+	set_physics_process(false)
+	set_process(false)
+	collision_shape.disabled = true
+	
+	await get_tree().create_timer(0.5).timeout
+	queue_free()
+	#end of safety check
 
 func bounce(force: Vector2):
 	velocity = force
@@ -176,7 +200,10 @@ func _physics_process(delta: float) -> void:
 	
 	# This updates collision and floor detection, resets velocity, etc (to use methods like is_on_floor, etc)
 	move_and_slide()	
-	
+	#safety check
+	if is_dead:
+		return
+		
 	if was_on_floor && not is_on_floor():
 		coyote_timer.start()
 		
