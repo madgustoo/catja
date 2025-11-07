@@ -38,6 +38,16 @@ var facing_direction = 1 # Looking right by default
 var wall_direction = 0
 var elapsed_time = 0.0
 
+# Store original collision shape values
+var original_shape_height = 0.0
+var original_shape_position = Vector2.ZERO
+
+func _ready():
+	# Store original collision shape values
+	if collision_shape.shape is CapsuleShape2D:
+		original_shape_height = collision_shape.shape.height
+		original_shape_position = collision_shape.position
+
 func bounce(force: Vector2):
 	velocity = force
 
@@ -109,12 +119,16 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity.x = 0
 				animated_stripe.play("crouch")
-				collision_shape.shape.radius = 30
-				collision_shape.position = Vector2(0.0, -4.0)
+				# Fix: Check if shape is valid and use correct property
+				if collision_shape.shape is CapsuleShape2D:
+					collision_shape.shape.height = 60  # Reduce height for crouch
+					collision_shape.position = Vector2(0.0, 16.0)  # Adjust position down
 			if Input.is_action_just_released("sneak"):
 				state = State.NORMAL
-				collision_shape.shape.radius = 60
-				collision_shape.position = Vector2(0.0, -7.0)
+				# Restore original collision shape
+				if collision_shape.shape is CapsuleShape2D:
+					collision_shape.shape.height = original_shape_height
+					collision_shape.position = original_shape_position
 		State.WALL_CLIMB:
 			# wall_direction is -1 for up, and +1 for down
 			var wall_direction = direction
@@ -174,7 +188,3 @@ func wall_jump():
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	pass
-	#if animated_stripe.animation == "land":
-		#print("Finished landed animation")
-		#animated_stripe.play("idle")
-		#just_landed = false
