@@ -52,6 +52,7 @@ autoplay = "default"
 frame_progress = 0.755002
 
 [node name="Killzone" parent="." instance=ExtResource("2_4l1t8")]
+scale = Vector2(1.00189, 1)
 collision_layer = 8
 collision_mask = 1
 

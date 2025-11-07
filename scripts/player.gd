@@ -45,6 +45,7 @@ var original_shape_position = Vector2.ZERO
 
 #death safety-check
 var is_dead = false
+var is_crouching = false
 
 func _ready():
 	# Store original collision shape values
@@ -59,10 +60,31 @@ func _ready():
 		
 		add_to_group("player")
 		
+
+func enter_crouch():
+	if is_crouching or is_dead:
+		return
+	is_crouching = true
+	if collision_shape.shape is CapsuleShape2D:
+		collision_shape.shape.height = 60
+		collision_shape.position = Vector2(0.0, 16.0)
+		
+		
+func exit_crouch():
+	if not is_crouching or is_dead:
+		return
+	is_crouching = false
+	if collision_shape.shape is CapsuleShape2D:
+		collision_shape.shape.height = original_shape_height
+		collision_shape.position = original_shape_position
+			
+		
 func die():
 	if is_dead:
 		return
 	is_dead = true
+	
+	exit_crouch()
 	
 	set_physics_process(false)
 	set_process(false)
@@ -98,14 +120,17 @@ func _physics_process(delta: float) -> void:
 		State.NORMAL:
 			if is_on_floor() or !coyote_timer.is_stopped():
 				if Input.is_action_just_pressed("jump"):
+					exit_crouch()  #safety check
 					state = State.JUMPING
 					velocity.y = JUMP_VELOCITY
 					animated_stripe.play("jump")
 					elapsed_time = 0
 				elif Input.is_action_pressed("sneak") && is_on_floor():
+					enter_crouch() #safety check
 					state = State.SNEAK
 					elapsed_time = 0
 				elif direction:
+					exit_crouch() #safety check
 					velocity.x = move_toward(velocity.x, direction * SPEED, SPEED * acceleration)
 					animated_stripe.flip_h = direction < 0
 					animated_stripe.play("run")
@@ -120,8 +145,10 @@ func _physics_process(delta: float) -> void:
 						else:
 							animated_stripe.play("idle")
 			else:
+				exit_crouch() #safety check
 				state = State.JUMPING
 		State.JUMPING:
+			exit_crouch() #safety check
 			if direction != 0:
 				velocity.x = move_toward(velocity.x, direction * SPEED, SPEED * acceleration * 0.5)
 				animated_stripe.flip_h = direction < 0
@@ -143,10 +170,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity.x = 0
 				animated_stripe.play("crouch")
-				# Fix: Check if shape is valid and use correct property
-				if collision_shape.shape is CapsuleShape2D:
-					collision_shape.shape.height = 60  # Reduce height for crouch
-					collision_shape.position = Vector2(0.0, 16.0)  # Adjust position down
+
 			if Input.is_action_just_released("sneak"):
 				state = State.NORMAL
 				# Restore original collision shape
