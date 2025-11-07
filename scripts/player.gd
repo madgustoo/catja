@@ -6,6 +6,14 @@ extends CharacterBody2D
 @onready var camera: Camera2D = $Camera2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
+@export var jump_height: float = 100.0
+@export var jump_time_to_peak: float = 0.55
+@export var jump_time_to_descend: float = 0.3
+
+@onready var jump_velocity: float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
+@onready var jump_gravity: float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
+@onready var fall_gravity: float = ((-2.0 * jump_height) / (jump_time_to_descend * jump_time_to_descend)) * -1.0
+
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
 @export_range(0, 1) var decelerate_on_jump_release = 0.5
@@ -13,7 +21,6 @@ extends CharacterBody2D
 enum State {
 	NORMAL,
 	JUMPING,
-	FALL,
 	SNEAK,
 	WALL_CLIMB,
 	WALL_SLIDE
@@ -38,17 +45,19 @@ var facing_direction = 1 # Looking right by default
 var wall_direction = 0
 var elapsed_time = 0.0
 
+func _get_gravity():
+	return jump_gravity if velocity.y < 0 else fall_gravity
+
 func bounce(force: Vector2):
 	velocity = force
 
 func _physics_process(delta: float) -> void:			
 	if not is_on_floor():
 		if velocity.y < 0:
-			# Apply down gravity
-			velocity += get_gravity() * delta
+			velocity.y += jump_gravity * delta
 		else:
-			# Make falling faster and caps at MAX_FALL_SPEED
-			velocity.y += FALL_GRAVITY * delta
+			# Make falling faster and cap it at MAX_FALL_SPEED
+			velocity.y += fall_gravity * delta
 			if velocity.y > MAX_FALL_SPEED:
 				velocity.y = MAX_FALL_SPEED
 			
