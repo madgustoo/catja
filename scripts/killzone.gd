@@ -13,11 +13,10 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.has_node("CollisionShape2D"):
 		var collision = body.get_node("CollisionShape2D")
 		if is_instance_valid(collision):
-			collision.disabled = true  # Disable instead of freeing
+			collision.set_deferred("disabled", true)  # Disable instead of freeing
 	
 	#safety check - disable player physics immediately
-	if body.has_method("set_physics_process"):
-		body.set_physics_process(false)
+	body.set_physics_process(false)
 	
 	timer.start()
 
