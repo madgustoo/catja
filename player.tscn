@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://c2ow84qxmy37a"]
+[gd_scene load_steps=71 format=3 uid="uid://c2ow84qxmy37a"]
 
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
@@ -12,7 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://ddtcfkfkbippg" path="res://assets/sprites/player/cat05_wallclimb_strip8.png" id="9_b26j0"]
 [ext_resource type="Texture2D" uid="uid://bvv25px2qw34i" path="res://assets/sprites/player/cat05_wallgrab_strip8.png" id="10_n7ghd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hqtel"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_nvl01"]
+radius = 60.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
@@ -205,6 +206,10 @@ region = Rect2(240, 0, 40, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_l3lcn"]
 atlas = ExtResource("9_b26j0")
 region = Rect2(280, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xry5e"]
+atlas = ExtResource("9_b26j0")
+region = Rect2(240, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ek41f"]
 atlas = ExtResource("10_n7ghd")
@@ -436,6 +441,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_xry5e")
+}],
+"loop": false,
+"name": &"wall_crouch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ek41f")
 }, {
 "duration": 1.0,
@@ -470,19 +483,18 @@ collision_mask = 14
 script = ExtResource("1_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-13, -15)
-scale = Vector2(0.639999, 0.639999)
-shape = SubResource("CircleShape2D_hqtel")
+position = Vector2(0, -7)
+scale = Vector2(-0.110084, -0.110084)
+shape = SubResource("CircleShape2D_nvl01")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(-13, -21)
+position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"run"
+animation = &"sneak"
 autoplay = "idle"
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-position = Vector2(-13, -11)
 target_position = Vector2(0, 14)
 
 [node name="CoyoteTimer" type="Timer" parent="."]
