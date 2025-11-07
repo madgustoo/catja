@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k0solj80n08i"
-path="res://.godot/imported/platformIndustrial_sheet.png-bbde1ce07ad2a2b388ee8afc2810a9ce.ctex"
+uid="uid://c46sc674arw6t"
+path="res://.godot/imported/platforms.png-885c2249912e227f6592704d57fbb22d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/platformIndustrial_sheet.png"
-dest_files=["res://.godot/imported/platformIndustrial_sheet.png-bbde1ce07ad2a2b388ee8afc2810a9ce.ctex"]
+source_file="res://assets/sprites/tilemap/platforms.png"
+dest_files=["res://.godot/imported/platforms.png-885c2249912e227f6592704d57fbb22d.ctex"]
 
 [params]
 

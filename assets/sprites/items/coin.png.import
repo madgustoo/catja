@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3w80iv8inomu"
-path="res://.godot/imported/balloon-sprite-sheet.png-408dd5bff2a918fa9ffb27a8d6144711.ctex"
+uid="uid://pf8jjgq2fwl8"
+path="res://.godot/imported/coin.png-bd14666f987f54e8f90ae43f03d4d01b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/balloon-sprite-sheet.png"
-dest_files=["res://.godot/imported/balloon-sprite-sheet.png-408dd5bff2a918fa9ffb27a8d6144711.ctex"]
+source_file="res://assets/sprites/items/coin.png"
+dest_files=["res://.godot/imported/coin.png-bd14666f987f54e8f90ae43f03d4d01b.ctex"]
 
 [params]
 

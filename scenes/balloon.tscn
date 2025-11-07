@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://bm2im00bd07oa"]
 
-[ext_resource type="Texture2D" uid="uid://d3w80iv8inomu" path="res://assets/sprites/balloon-sprite-sheet.png" id="1_n2rxu"]
-[ext_resource type="Script" uid="uid://dr0r6d5ha5tqf" path="res://balloon.gd" id="1_r345k"]
+[ext_resource type="Texture2D" uid="uid://d3w80iv8inomu" path="res://assets/sprites/items/balloon-sprite-sheet.png" id="1_n2rxu"]
+[ext_resource type="Script" uid="uid://dr0r6d5ha5tqf" path="res://scenes/balloon.gd" id="1_r345k"]
 [ext_resource type="AudioStream" uid="uid://b61h6r5tj6my" path="res://assets/sounds/pop.wav" id="3_4emby"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n2rxu"]

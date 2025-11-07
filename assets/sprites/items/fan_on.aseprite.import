@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c46sc674arw6t"
-path="res://.godot/imported/platforms.png-3869606db457611ed4193d705dc364e4.ctex"
+uid="uid://63bdaa4jrpbw"
+path="res://.godot/imported/fan_on.aseprite-d8c262a8baff276dc31ace924d8dfe68.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/platforms.png"
-dest_files=["res://.godot/imported/platforms.png-3869606db457611ed4193d705dc364e4.ctex"]
+source_file="res://assets/sprites/items/fan_on.aseprite"
+dest_files=["res://.godot/imported/fan_on.aseprite-d8c262a8baff276dc31ace924d8dfe68.ctex"]
 
 [params]
 

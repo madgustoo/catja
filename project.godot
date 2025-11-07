@@ -14,13 +14,25 @@ config/name="catja"
 run/main_scene="uid://c14x4qnf2i71x"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[aseprite_importers]
+
+aseprite_executable_path="D:/Aseprite/Aseprite.exe"
+
+[audio]
+
+buses/default_bus_layout="res://SFX/default_bus_layout.tres"
+
 [autoload]
 
-Music="*res://music.tscn"
+Music="*res://scenes/music.tscn"
 
 [dotnet]
 
 project/assembly_name="catja"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/nklbdev.aseprite_importers/plugin.cfg")
 
 [input]
 

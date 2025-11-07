@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=3 uid="uid://lbvxauc57kd3"]
+
+[ext_resource type="Script" uid="uid://cx6pqo8ea5v13" path="res://scripts/vert_fan.gd" id="1_456lk"]
+[ext_resource type="Texture2D" uid="uid://btuhs01h2nos4" path="res://assets/sprites/items/fan.aseprite" id="2_hmne3"]
+[ext_resource type="Texture2D" uid="uid://63bdaa4jrpbw" path="res://assets/sprites/items/fan_on.aseprite" id="3_3kdld"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jpsd8"]
+size = Vector2(34, 180)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryvv2"]
+atlas = ExtResource("3_3kdld")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tstrt"]
+atlas = ExtResource("3_3kdld")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4l2k"]
+atlas = ExtResource("3_3kdld")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wrqpv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_hmne3")
+}],
+"loop": false,
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryvv2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tstrt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4l2k")
+}],
+"loop": true,
+"name": &"on",
+"speed": 15.0
+}]
+
+[sub_resource type="Curve" id="Curve_v1j4w"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_durvb"]
+curve = SubResource("Curve_v1j4w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qadmw"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 100.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_durvb")
+
+[node name="VertFan" type="Area2D"]
+script = ExtResource("1_456lk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -75)
+scale = Vector2(1, 0.808992)
+shape = SubResource("RectangleShape2D_jpsd8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wrqpv")
+animation = &"off"
+autoplay = "on"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 16
+lifetime = 5.0
+randomness = 0.2
+trail_enabled = true
+trail_lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_qadmw")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

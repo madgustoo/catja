@@ -52,15 +52,11 @@ func _ready():
 	if collision_shape.shape is CapsuleShape2D:
 		original_shape_height = collision_shape.shape.height
 		original_shape_position = collision_shape.position
+	
+	#safety check - add player to group so enemy can identify it
+	add_to_group("player")
 
-#safety check for death (Store original collision shape values)
-	if collision_shape.shape is CapsuleShape2D:
-		original_shape_height = collision_shape.shape.height
-		original_shape_position = collision_shape.position
-		
-		add_to_group("player")
-		
-
+#safety check - only modify collision shape once when entering crouch
 func enter_crouch():
 	if is_crouching or is_dead:
 		return
@@ -68,8 +64,8 @@ func enter_crouch():
 	if collision_shape.shape is CapsuleShape2D:
 		collision_shape.shape.height = 60
 		collision_shape.position = Vector2(0.0, 16.0)
-		
-		
+
+#safety check - only modify collision shape once when exiting crouch
 func exit_crouch():
 	if not is_crouching or is_dead:
 		return
@@ -77,27 +73,34 @@ func exit_crouch():
 	if collision_shape.shape is CapsuleShape2D:
 		collision_shape.shape.height = original_shape_height
 		collision_shape.position = original_shape_position
-			
-		
+
+#safety check - handle death properly
 func die():
 	if is_dead:
 		return
 	is_dead = true
 	
-	exit_crouch()
+	#safety check - exit crouch before dying
+	if is_crouching:
+		exit_crouch()
 	
+	#safety check - disable all processing and input
 	set_physics_process(false)
 	set_process(false)
-	collision_shape.disabled = true
+	set_process_input(false)
+	collision_shape.set_deferred("disabled", true)
 	
 	await get_tree().create_timer(0.5).timeout
 	queue_free()
-	#end of safety check
 
 func bounce(force: Vector2):
 	velocity = force
 
-func _physics_process(delta: float) -> void:			
+func _physics_process(delta: float) -> void:
+	#safety check - stop all physics when dead
+	if is_dead:
+		return
+		
 	if not is_on_floor():
 		if velocity.y < 0:
 			# Apply down gravity
@@ -172,12 +175,10 @@ func _physics_process(delta: float) -> void:
 				animated_stripe.play("crouch")
 
 			if Input.is_action_just_released("sneak"):
+				exit_crouch() #safety check
 				state = State.NORMAL
-				# Restore original collision shape
-				if collision_shape.shape is CapsuleShape2D:
-					collision_shape.shape.height = original_shape_height
-					collision_shape.position = original_shape_position
 		State.WALL_CLIMB:
+			exit_crouch() #safety check
 			# wall_direction is -1 for up, and +1 for down
 			var wall_direction = direction
 			if facing_direction > 0:
@@ -199,6 +200,7 @@ func _physics_process(delta: float) -> void:
 				animated_stripe.rotation_degrees = 0
 				state = State.NORMAL
 		State.WALL_SLIDE:
+			exit_crouch() #safety check
 			animated_stripe.play("wall_slide")
 			velocity.y = WALL_SLIDE_SPEED
 			if facing_direction > 0:
@@ -224,10 +226,7 @@ func _physics_process(delta: float) -> void:
 	
 	# This updates collision and floor detection, resets velocity, etc (to use methods like is_on_floor, etc)
 	move_and_slide()	
-	#safety check
-	if is_dead:
-		return
-		
+	
 	if was_on_floor && not is_on_floor():
 		coyote_timer.start()
 		
@@ -236,6 +235,9 @@ func wall_jump():
 	velocity.y = JUMP_VELOCITY
 	velocity.x = -facing_direction * WALL_JUMP_PUSH_FORCE
 	animated_stripe.flip_h = true if facing_direction > 0 else false
+	
+func push_upward(vertical_force):
+	velocity.y += vertical_force
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	pass

@@ -1,15 +1,16 @@
-[gd_scene load_steps=18 format=4 uid="uid://c14x4qnf2i71x"]
+[gd_scene load_steps=19 format=4 uid="uid://c14x4qnf2i71x"]
 
-[ext_resource type="PackedScene" uid="uid://c2ow84qxmy37a" path="res://player.tscn" id="1_ig7tw"]
-[ext_resource type="Texture2D" uid="uid://k0solj80n08i" path="res://assets/sprites/platformIndustrial_sheet.png" id="2_h2yge"]
-[ext_resource type="Texture2D" uid="uid://65p0yfpd5x2x" path="res://assets/sprites/four-seasons-tileset.png" id="3_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://fqy4wtviy4df" path="res://platform.tscn" id="4_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://clpyhbxckwvmk" path="res://coin.tscn" id="5_lquwl"]
-[ext_resource type="PackedScene" uid="uid://ch4l2i2fqj3r5" path="res://killzone.tscn" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://uyya6ys3jcib" path="res://slime.tscn" id="7_272bh"]
-[ext_resource type="FontFile" uid="uid://bu8sw67wna7op" path="res://assets/fonts/PixelOperator8.ttf" id="8_5vw27"]
-[ext_resource type="Script" uid="uid://bkpj5jswqoewa" path="res://scripts/game_manager.gd" id="9_kek77"]
-[ext_resource type="PackedScene" uid="uid://bm2im00bd07oa" path="res://balloon.tscn" id="10_4c57u"]
+[ext_resource type="Script" uid="uid://bkpj5jswqoewa" path="res://scripts/game_manager.gd" id="1_choun"]
+[ext_resource type="FontFile" uid="uid://bu8sw67wna7op" path="res://assets/fonts/PixelOperator8.ttf" id="2_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://c2ow84qxmy37a" path="res://scenes/player.tscn" id="3_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://ch4l2i2fqj3r5" path="res://scenes/killzone.tscn" id="4_trceg"]
+[ext_resource type="PackedScene" uid="uid://clpyhbxckwvmk" path="res://scenes/coin.tscn" id="5_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://fqy4wtviy4df" path="res://scenes/platform.tscn" id="6_jkv2x"]
+[ext_resource type="Texture2D" uid="uid://k0solj80n08i" path="res://assets/sprites/tilemap/platformIndustrial_sheet.png" id="7_jbj1t"]
+[ext_resource type="Texture2D" uid="uid://65p0yfpd5x2x" path="res://assets/sprites/tilemap/four-seasons-tileset.png" id="8_muem4"]
+[ext_resource type="PackedScene" uid="uid://uyya6ys3jcib" path="res://scenes/slime.tscn" id="9_dp3eg"]
+[ext_resource type="PackedScene" uid="uid://bm2im00bd07oa" path="res://scenes/balloon.tscn" id="10_0ld40"]
+[ext_resource type="PackedScene" uid="uid://lbvxauc57kd3" path="res://scenes/vert_fan.tscn" id="11_ya4ey"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_7mycd"]
 distance = -94.0
@@ -53,7 +54,7 @@ _data = {
 }
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lquwl"]
-texture = ExtResource("2_h2yge")
+texture = ExtResource("7_jbj1t")
 4:0/0 = 0
 5:0/0 = 0
 6:0/0 = 0
@@ -1457,7 +1458,7 @@ texture = ExtResource("2_h2yge")
 3:3/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7mycd"]
-texture = ExtResource("3_1bvp3")
+texture = ExtResource("8_muem4")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
@@ -1646,7 +1647,7 @@ sources/1 = SubResource("TileSetAtlasSource_7mycd")
 
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("9_kek77")
+script = ExtResource("1_choun")
 
 [node name="CoinsLabel" type="Label" parent="GameManager"]
 offset_left = 592.0
@@ -1654,11 +1655,11 @@ offset_top = -61.0
 offset_right = 795.0
 offset_bottom = 12.0
 scale = Vector2(0.66581, 0.66581)
-theme_override_fonts/font = ExtResource("8_5vw27")
+theme_override_fonts/font = ExtResource("2_ya4ey")
 text = "You have collected X coins. You can jump now"
 autowrap_mode = 2
 
-[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+[node name="Player" parent="." instance=ExtResource("3_eb6dy")]
 position = Vector2(-365, 165)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -1669,7 +1670,7 @@ limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="Killzone" parent="." instance=ExtResource("6_7mycd")]
+[node name="Killzone" parent="." instance=ExtResource("4_trceg")]
 position = Vector2(200, -27)
 collision_mask = 1
 
@@ -1680,18 +1681,18 @@ debug_color = Color(0.966772, 0.135364, 0.31688, 0.42)
 
 [node name="Coins" type="Node" parent="."]
 
-[node name="Coin" parent="Coins" instance=ExtResource("5_lquwl")]
+[node name="Coin" parent="Coins" instance=ExtResource("5_a8y0u")]
 position = Vector2(42, -9)
 
-[node name="Coin2" parent="Coins" instance=ExtResource("5_lquwl")]
+[node name="Coin2" parent="Coins" instance=ExtResource("5_a8y0u")]
 position = Vector2(170, -162)
 
 [node name="Platforms" type="Node" parent="."]
 
-[node name="Platform" parent="Platforms" instance=ExtResource("4_1bvp3")]
+[node name="Platform" parent="Platforms" instance=ExtResource("6_jkv2x")]
 position = Vector2(42, 4)
 
-[node name="Platform2" parent="Platforms" instance=ExtResource("4_1bvp3")]
+[node name="Platform2" parent="Platforms" instance=ExtResource("6_jkv2x")]
 position = Vector2(-76, -36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Platforms/Platform2"]
@@ -1700,7 +1701,7 @@ libraries = {
 }
 autoplay = "Move"
 
-[node name="Platform3" parent="Platforms" instance=ExtResource("4_1bvp3")]
+[node name="Platform3" parent="Platforms" instance=ExtResource("6_jkv2x")]
 position = Vector2(-61, -83)
 
 [node name="TileMaps" type="Node2D" parent="."]
@@ -1724,19 +1725,19 @@ tile_map_data = PackedByteArray("AAABAAMAAQAAAA0AAAACAAMAAQAAAA0AAAADAAMAAQAAAA0
 tile_set = SubResource("TileSet_272bh")
 collision_enabled = false
 
-[node name="Platform" parent="TileMaps" instance=ExtResource("4_1bvp3")]
+[node name="Platform" parent="TileMaps" instance=ExtResource("6_jkv2x")]
 position = Vector2(-366, 173)
 
-[node name="Slime3" parent="." instance=ExtResource("7_272bh")]
+[node name="Slime3" parent="." instance=ExtResource("9_dp3eg")]
 position = Vector2(155, 92)
 
-[node name="Coin" parent="." instance=ExtResource("5_lquwl")]
+[node name="Coin" parent="." instance=ExtResource("5_a8y0u")]
 position = Vector2(457, 89)
 
-[node name="Coin2" parent="." instance=ExtResource("5_lquwl")]
+[node name="Coin2" parent="." instance=ExtResource("5_a8y0u")]
 position = Vector2(651, -1)
 
-[node name="Slime" parent="." instance=ExtResource("7_272bh")]
+[node name="Slime" parent="." instance=ExtResource("9_dp3eg")]
 position = Vector2(652, -3)
 
 [node name="Label" type="Label" parent="."]
@@ -1745,7 +1746,7 @@ offset_top = -27.0
 offset_right = 104.0
 offset_bottom = -4.0
 scale = Vector2(0.4, 0.4)
-theme_override_fonts/font = ExtResource("8_5vw27")
+theme_override_fonts/font = ExtResource("2_ya4ey")
 theme_override_font_sizes/font_size = 0
 text = "Space to jump!"
 
@@ -1755,10 +1756,13 @@ offset_top = 89.0
 offset_right = 419.0
 offset_bottom = 147.0
 scale = Vector2(0.4, 0.4)
-theme_override_fonts/font = ExtResource("8_5vw27")
+theme_override_fonts/font = ExtResource("2_ya4ey")
 theme_override_font_sizes/font_size = 0
 text = "There has to be another way"
 autowrap_mode = 2
 
-[node name="MovingBalloon3" parent="." instance=ExtResource("10_4c57u")]
+[node name="MovingBalloon3" parent="." instance=ExtResource("10_0ld40")]
 position = Vector2(-370, 113)
+
+[node name="VertFan" parent="." instance=ExtResource("11_ya4ey")]
+position = Vector2(-310, 20)

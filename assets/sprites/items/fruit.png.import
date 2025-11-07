@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://65p0yfpd5x2x"
-path="res://.godot/imported/four-seasons-tileset.png-31b20aa486d8c8f9735d338765b8d134.ctex"
+uid="uid://g1kghk5gwegd"
+path="res://.godot/imported/fruit.png-56f0ad87a69fe446d220a99518a24008.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/four-seasons-tileset.png"
-dest_files=["res://.godot/imported/four-seasons-tileset.png-31b20aa486d8c8f9735d338765b8d134.ctex"]
+source_file="res://assets/sprites/items/fruit.png"
+dest_files=["res://.godot/imported/fruit.png-56f0ad87a69fe446d220a99518a24008.ctex"]
 
 [params]
 
