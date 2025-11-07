@@ -5,6 +5,7 @@ extends CharacterBody2D
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var camera: Camera2D = $Camera2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var jump_buffer_timer: Timer = $JumpBufferTimer
 
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
@@ -13,7 +14,6 @@ extends CharacterBody2D
 enum State {
 	NORMAL,
 	JUMPING,
-	FALL,
 	SNEAK,
 	WALL_CLIMB,
 	WALL_SLIDE
@@ -61,14 +61,16 @@ func _physics_process(delta: float) -> void:
 	var direction := Input.get_axis("move_left", "move_right")
 	
 	match state:
-		State.NORMAL:
+		State.NORMAL:			
 			if is_on_floor() or !coyote_timer.is_stopped():
-				if Input.is_action_just_pressed("jump"):
+				# If the jump buffer still hasn't completed yet once he lands, 
+				# it means he registered the jump right before landing and we make him jump again withou tany input from his part
+				if Input.is_action_just_pressed("jump") or !jump_buffer_timer.is_stopped():
 					state = State.JUMPING
 					velocity.y = JUMP_VELOCITY
 					animated_stripe.play("jump")
 					elapsed_time = 0
-				elif Input.is_action_pressed("sneak") && is_on_floor():
+				elif Input.is_action_pressed("sneak"):
 					state = State.SNEAK
 					elapsed_time = 0
 				elif direction:
@@ -88,6 +90,9 @@ func _physics_process(delta: float) -> void:
 			else:
 				state = State.JUMPING
 		State.JUMPING:
+			if Input.is_action_just_pressed("jump"):
+				# Jump buffer registered while he's still in the "Jumping" state (still in the air)
+				jump_buffer_timer.start()
 			if direction != 0:
 				velocity.x = move_toward(velocity.x, direction * SPEED, SPEED * acceleration * 0.5)
 				animated_stripe.flip_h = direction < 0
