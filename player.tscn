@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://r5yddaw8hhcf" path="res://assets/sprites/player/cat05_idle_strip8.png" id="2_hqtel"]
+[ext_resource type="Shape2D" uid="uid://b4ob2bgretum0" path="res://resources/collisions/player_standing.tres" id="2_ivps1"]
 [ext_resource type="Texture2D" uid="uid://c017a3wr1dkxo" path="res://assets/sprites/player/cat05_jump_strip4.png" id="3_2hs0m"]
 [ext_resource type="Texture2D" uid="uid://bsrqbhbmnftid" path="res://assets/sprites/player/cat05_run_strip4.png" id="3_hqtel"]
 [ext_resource type="Texture2D" uid="uid://cggn8tir85ip" path="res://assets/sprites/player/cat05_walk_strip8.png" id="3_sweqy"]
@@ -11,9 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://csk1kwb40igll" path="res://assets/sprites/player/cat05_sleep_strip8.png" id="7_n7ghd"]
 [ext_resource type="Texture2D" uid="uid://ddtcfkfkbippg" path="res://assets/sprites/player/cat05_wallclimb_strip8.png" id="9_b26j0"]
 [ext_resource type="Texture2D" uid="uid://bvv25px2qw34i" path="res://assets/sprites/player/cat05_wallgrab_strip8.png" id="10_n7ghd"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_nvl01"]
-radius = 60.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
@@ -484,14 +482,15 @@ script = ExtResource("1_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
-scale = Vector2(-0.110084, -0.110084)
-shape = SubResource("CircleShape2D_nvl01")
+rotation = 3.14159
+scale = Vector2(0.110084, 0.110084)
+shape = ExtResource("2_ivps1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"sneak"
+animation = &"crouch"
 autoplay = "idle"
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
@@ -504,6 +503,19 @@ one_shot = true
 [node name="JumpBufferTimer" type="Timer" parent="."]
 wait_time = 0.08
 one_shot = true
+
+[node name="CrouchRayCast1" type="RayCast2D" parent="."]
+position = Vector2(5, -8)
+rotation = 3.14159
+exclude_parent = false
+target_position = Vector2(-8.44002e-05, 12)
+collision_mask = 4
+
+[node name="CrouchRayCast2" type="RayCast2D" parent="."]
+position = Vector2(-6, -8)
+rotation = 3.14159
+target_position = Vector2(-8.44002e-05, 12)
+collision_mask = 4
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

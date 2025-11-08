@@ -7,6 +7,9 @@ extends CharacterBody2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 
+@onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
+@onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
+
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
 @export_range(0, 1) var decelerate_on_jump_release = 0.5
@@ -38,6 +41,9 @@ var facing_direction = 1 # Looking right by default
 var wall_direction = 0
 var elapsed_time = 0.0
 
+var standing_collision_shape = preload("res://resources/collisions/player_standing.tres")
+var crouching_collision_shape = preload("res://resources/collisions/player_crouching.tres")
+
 func bounce(force: Vector2):
 	velocity = force
 
@@ -64,13 +70,14 @@ func _physics_process(delta: float) -> void:
 		State.NORMAL:			
 			if is_on_floor() or !coyote_timer.is_stopped():
 				# If the jump buffer still hasn't completed yet once he lands, 
-				# it means he registered the jump right before landing and we make him jump again withou tany input from his part
+				# it means he registered the jump right before landing and we make him jump again
 				if Input.is_action_just_pressed("jump") or !jump_buffer_timer.is_stopped():
 					state = State.JUMPING
 					velocity.y = JUMP_VELOCITY
 					animated_stripe.play("jump")
 					elapsed_time = 0
 				elif Input.is_action_pressed("sneak"):
+					print("sneak man")
 					state = State.SNEAK
 					elapsed_time = 0
 				elif direction:
@@ -114,12 +121,19 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity.x = 0
 				animated_stripe.play("crouch")
-				collision_shape.shape.radius = 30
+				collision_shape.shape = crouching_collision_shape
 				collision_shape.position = Vector2(0.0, -4.0)
 			if Input.is_action_just_released("sneak"):
+				# Sneak button is not pressed anymore, but if he's still coliding with something, don't change the state back
+				if !crouch_ray_cast_1.is_colliding() and !crouch_ray_cast_2.is_colliding():
+					state = State.NORMAL
+					collision_shape.shape = standing_collision_shape
+					collision_shape.position = Vector2(0.0, -7.0)
+			if !crouch_ray_cast_1.is_colliding() and !crouch_ray_cast_2.is_colliding():
 				state = State.NORMAL
-				collision_shape.shape.radius = 60
+				collision_shape.shape = standing_collision_shape
 				collision_shape.position = Vector2(0.0, -7.0)
+				# If not collindign anymore
 		State.WALL_CLIMB:
 			# wall_direction is -1 for up, and +1 for down
 			var wall_direction = direction
