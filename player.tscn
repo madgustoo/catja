@@ -297,7 +297,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_1xqrm")
 }],
 "loop": false,
@@ -490,8 +490,9 @@ shape = ExtResource("2_ivps1")
 texture_filter = 1
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"crouch"
+animation = &"land"
 autoplay = "idle"
+frame_progress = 1.0
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, 14)
@@ -505,14 +506,13 @@ wait_time = 0.08
 one_shot = true
 
 [node name="CrouchRayCast1" type="RayCast2D" parent="."]
-position = Vector2(5, -8)
+position = Vector2(5, -3)
 rotation = 3.14159
-exclude_parent = false
 target_position = Vector2(-8.44002e-05, 12)
 collision_mask = 4
 
 [node name="CrouchRayCast2" type="RayCast2D" parent="."]
-position = Vector2(-6, -8)
+position = Vector2(-6, -3)
 rotation = 3.14159
 target_position = Vector2(-8.44002e-05, 12)
 collision_mask = 4

@@ -84,10 +84,6 @@ up={
 2d_physics/layer_4="Enemies"
 2d_physics/canvas_textures/default_texture_filter=1
 
-[physics]
-
-2d/default_gravity=3014.5
-
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

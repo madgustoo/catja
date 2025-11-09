@@ -19,7 +19,8 @@ enum State {
 	JUMPING,
 	SNEAK,
 	WALL_CLIMB,
-	WALL_SLIDE
+	WALL_SLIDE,
+	LANDED
 }
 
 var state = State.NORMAL
@@ -35,19 +36,23 @@ const WALL_SLIDE_SPEED = 80.0
 const WALL_GRAVITY = 200.0
 const WALL_JUMP_PUSH_FORCE = 120.0
 
-var just_landed = false
-
 var facing_direction = 1 # Looking right by default
 var wall_direction = 0
 var elapsed_time = 0.0
+
+var isCrouchBlocked = false
 
 var standing_collision_shape = preload("res://resources/collisions/player_standing.tres")
 var crouching_collision_shape = preload("res://resources/collisions/player_crouching.tres")
 
 func bounce(force: Vector2):
 	velocity = force
+	
+func _ready() -> void:
+	crouch_ray_cast_1.enabled = false
+	crouch_ray_cast_2.enabled = false
 
-func _physics_process(delta: float) -> void:			
+func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		if velocity.y < 0:
 			# Apply down gravity
@@ -67,7 +72,9 @@ func _physics_process(delta: float) -> void:
 	var direction := Input.get_axis("move_left", "move_right")
 	
 	match state:
-		State.NORMAL:			
+		State.NORMAL:
+			crouch_ray_cast_1.enabled = false
+			crouch_ray_cast_2.enabled = false
 			if is_on_floor() or !coyote_timer.is_stopped():
 				# If the jump buffer still hasn't completed yet once he lands, 
 				# it means he registered the jump right before landing and we make him jump again
@@ -77,7 +84,6 @@ func _physics_process(delta: float) -> void:
 					animated_stripe.play("jump")
 					elapsed_time = 0
 				elif Input.is_action_pressed("sneak"):
-					print("sneak man")
 					state = State.SNEAK
 					elapsed_time = 0
 				elif direction:
@@ -114,26 +120,33 @@ func _physics_process(delta: float) -> void:
 			elif is_on_floor():
 				state = State.NORMAL
 		State.SNEAK:
+			crouch_ray_cast_1.enabled = true
+			crouch_ray_cast_2.enabled = true
 			if direction:
 				velocity.x = direction * SNEAK_SPEED
 				animated_stripe.flip_h = direction < 0
+				# Crouch walk
 				animated_stripe.play("sneak")
+				collision_shape.shape = crouching_collision_shape
+				collision_shape.position = Vector2(0.0, -4.0)
 			else:
 				velocity.x = 0
 				animated_stripe.play("crouch")
 				collision_shape.shape = crouching_collision_shape
 				collision_shape.position = Vector2(0.0, -4.0)
 			if Input.is_action_just_released("sneak"):
+				isCrouchBlocked = crouch_ray_cast_1.is_colliding() or crouch_ray_cast_2.is_colliding()
 				# Sneak button is not pressed anymore, but if he's still coliding with something, don't change the state back
-				if !crouch_ray_cast_1.is_colliding() and !crouch_ray_cast_2.is_colliding():
+				if !isCrouchBlocked:
 					state = State.NORMAL
 					collision_shape.shape = standing_collision_shape
 					collision_shape.position = Vector2(0.0, -7.0)
-			if !crouch_ray_cast_1.is_colliding() and !crouch_ray_cast_2.is_colliding():
+#			# If isCrouchBlocked and he stopped colliding, stand him up
+			if isCrouchBlocked and !crouch_ray_cast_1.is_colliding() and !crouch_ray_cast_2.is_colliding():
 				state = State.NORMAL
 				collision_shape.shape = standing_collision_shape
 				collision_shape.position = Vector2(0.0, -7.0)
-				# If not collindign anymore
+				isCrouchBlocked = false
 		State.WALL_CLIMB:
 			# wall_direction is -1 for up, and +1 for down
 			var wall_direction = direction
@@ -176,14 +189,20 @@ func _physics_process(delta: float) -> void:
 				wall_jump()
 			if is_on_floor():
 				state = State.NORMAL
+		State.LANDED:
+			animated_stripe.play("land")
+			print("landed")
 	
 	var was_on_floor = is_on_floor() 
 	
 	# This updates collision and floor detection, resets velocity, etc (to use methods like is_on_floor, etc)
 	move_and_slide()	
 	
-	if was_on_floor && not is_on_floor():
+	if was_on_floor && !is_on_floor():
 		coyote_timer.start()
+		
+	if !was_on_floor and is_on_floor() and not Input.is_action_pressed("sneak"):
+		state = State.LANDED
 		
 func wall_jump():
 	state = State.NORMAL
@@ -192,8 +211,6 @@ func wall_jump():
 	animated_stripe.flip_h = true if facing_direction > 0 else false
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	pass
-	#if animated_stripe.animation == "land":
-		#print("Finished landed animation")
-		#animated_stripe.play("idle")
-		#just_landed = false
+	if animated_stripe.animation == "land":
+		print("Finished landed animation")
+		state = State.NORMAL
