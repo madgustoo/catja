@@ -1762,3 +1762,6 @@ autowrap_mode = 2
 
 [node name="MovingBalloon3" parent="." instance=ExtResource("10_4c57u")]
 position = Vector2(-370, 113)
+
+[node name="Slime2" parent="." instance=ExtResource("7_272bh")]
+position = Vector2(-399, 172)

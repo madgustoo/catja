@@ -20,7 +20,8 @@ enum State {
 	SNEAK,
 	WALL_CLIMB,
 	WALL_SLIDE,
-	LANDED
+	LANDED,
+	DEATH
 }
 
 var state = State.NORMAL
@@ -45,6 +46,14 @@ var isCrouchBlocked = false
 var standing_collision_shape = preload("res://resources/collisions/player_standing.tres")
 var crouching_collision_shape = preload("res://resources/collisions/player_crouching.tres")
 
+func die() -> void:
+	if state == State.DEATH:
+		return
+	state = State.DEATH
+	velocity = Vector2.ZERO
+	animated_stripe.play("death")
+	collision_shape.disabled = true
+
 func bounce(force: Vector2):
 	velocity = force
 	
@@ -62,6 +71,11 @@ func _physics_process(delta: float) -> void:
 			velocity.y += FALL_GRAVITY * delta
 			if velocity.y > MAX_FALL_SPEED:
 				velocity.y = MAX_FALL_SPEED
+				
+	if state == State.DEATH:
+		velocity.x = 0
+		move_and_slide()
+		return
 			
 	# Handle variable jump
 	if Input.is_action_just_released("jump") and velocity.y < 0:
