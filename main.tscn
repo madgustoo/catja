@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://c14x4qnf2i71x"]
+[gd_scene load_steps=19 format=4 uid="uid://c14x4qnf2i71x"]
 
 [ext_resource type="PackedScene" uid="uid://c2ow84qxmy37a" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://k0solj80n08i" path="res://assets/sprites/platformIndustrial_sheet.png" id="2_h2yge"]
@@ -10,6 +10,7 @@
 [ext_resource type="FontFile" uid="uid://bu8sw67wna7op" path="res://assets/fonts/PixelOperator8.ttf" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://bkpj5jswqoewa" path="res://scripts/game_manager.gd" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://bm2im00bd07oa" path="res://balloon.tscn" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://cjp804tgydgbi" path="res://bird.tscn" id="11_efxa6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_7mycd"]
 distance = -94.0
@@ -1762,3 +1763,6 @@ autowrap_mode = 2
 
 [node name="MovingBalloon3" parent="." instance=ExtResource("10_4c57u")]
 position = Vector2(-370, 113)
+
+[node name="bird" parent="." instance=ExtResource("11_efxa6")]
+position = Vector2(-309, 18)

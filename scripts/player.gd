@@ -171,6 +171,12 @@ func wall_jump():
 	velocity.y = JUMP_VELOCITY
 	velocity.x = -facing_direction * WALL_JUMP_PUSH_FORCE
 	animated_stripe.flip_h = true if facing_direction > 0 else false
+	
+func is_sneaking() -> bool:
+	return state == State.SNEAK
+
+	
+
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	pass
