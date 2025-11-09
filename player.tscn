@@ -490,9 +490,8 @@ shape = ExtResource("2_ivps1")
 texture_filter = 1
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"land"
+animation = &"wall_slide"
 autoplay = "idle"
-frame_progress = 1.0
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, 14)

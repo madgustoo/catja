@@ -190,8 +190,8 @@ func _physics_process(delta: float) -> void:
 			if is_on_floor():
 				state = State.NORMAL
 		State.LANDED:
+			# Changes back to normal state in _on_animated_sprite_2d_animation_finished
 			animated_stripe.play("land")
-			print("landed")
 	
 	var was_on_floor = is_on_floor() 
 	
@@ -212,5 +212,4 @@ func wall_jump():
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_stripe.animation == "land":
-		print("Finished landed animation")
 		state = State.NORMAL
