@@ -50,9 +50,9 @@ func die() -> void:
 	if state == State.DEATH:
 		return
 	state = State.DEATH
-	velocity = Vector2.ZERO
-	animated_stripe.play("death")
 	collision_shape.disabled = true
+	if velocity.y < MAX_FALL_SPEED:
+		animated_stripe.play("death")
 
 func bounce(force: Vector2):
 	velocity = force
@@ -111,7 +111,7 @@ func _physics_process(delta: float) -> void:
 					if abs(velocity.x) == 0:
 						elapsed_time += delta
 						if elapsed_time >= 60:
-							animated_stripe.play("sleep")
+							animated_stripe.play("sit")
 						else:
 							animated_stripe.play("idle")
 			else:

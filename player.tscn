@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://c2ow84qxmy37a"]
+[gd_scene load_steps=87 format=3 uid="uid://c2ow84qxmy37a"]
 
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
@@ -12,19 +12,12 @@
 [ext_resource type="Texture2D" uid="uid://cnq1wwmqiwvqe" path="res://assets/sprites/player/cat05_sneak_strip8.png" id="6_dw050"]
 [ext_resource type="Texture2D" uid="uid://csk1kwb40igll" path="res://assets/sprites/player/cat05_sleep_strip8.png" id="7_n7ghd"]
 [ext_resource type="Texture2D" uid="uid://ddtcfkfkbippg" path="res://assets/sprites/player/cat05_wallclimb_strip8.png" id="9_b26j0"]
+[ext_resource type="Texture2D" uid="uid://gyocjvdvjjdf" path="res://assets/sprites/player/cat05_sit_strip8.png" id="9_bwjto"]
 [ext_resource type="Texture2D" uid="uid://bvv25px2qw34i" path="res://assets/sprites/player/cat05_wallgrab_strip8.png" id="10_n7ghd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
 region = Rect2(0, 0, 40, 40)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h6w8y"]
-atlas = ExtResource("4_urp6f")
-region = Rect2(0, 0, 40, 40)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yem3p"]
-atlas = ExtResource("4_urp6f")
-region = Rect2(40, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_86rna"]
 atlas = ExtResource("4_urp6f")
@@ -109,6 +102,38 @@ region = Rect2(80, 0, 40, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dx0e4"]
 atlas = ExtResource("3_hqtel")
 region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_va2xi"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkf2u"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7jk6"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_feeoa"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6nxt"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ym00c"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee2o4"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(240, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vie4p"]
+atlas = ExtResource("9_bwjto")
+region = Rect2(280, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_khis8"]
 atlas = ExtResource("7_n7ghd")
@@ -286,12 +311,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_h6w8y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yem3p")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_86rna")
 }, {
 "duration": 1.0,
@@ -309,7 +328,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mgmjd")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 5.0
 }, {
@@ -382,6 +401,35 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_va2xi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkf2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s7jk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_feeoa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m6nxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ym00c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ee2o4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vie4p")
+}],
+"loop": true,
+"name": &"sit",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -554,7 +602,6 @@ position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
 animation = &"death"
 autoplay = "idle"
-frame_progress = 0.42094
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, 14)
