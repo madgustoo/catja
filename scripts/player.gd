@@ -10,8 +10,7 @@ extends CharacterBody2D
 @onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
 @onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
 
-# Attack system
-@onready var cooldown_timer: Timer = $CooldownTimer
+@onready var cooldown_timer: Timer = $CooldownTimer #*************************************
 
 @onready var hitbox: Area2D = $hitbox
 
@@ -94,14 +93,14 @@ func _physics_process(delta: float) -> void:
 			state = State.ATTACK
 			can_attack = false
 			animated_stripe.play("attack")
-			cooldown_timer.start()
+			cooldown_timer.start() 
+			
 			
 			# Check for enemies in hitbox area
-			var enemies = hitbox.get_overlapping_bodies()
+			var enemies = hitbox.get_overlapping_areas()
 			for enemy in enemies:
 				if enemy.is_in_group("Enemies"):
-					if enemy.has_method("take_damage"):
-						enemy.take_damage(20)
+					enemy.get_parent().queue_free()
 #******************************************************************
 	# Handle variable jump
 	if Input.is_action_just_released("jump") and velocity.y < 0:
@@ -252,12 +251,13 @@ func wall_jump():
 	velocity.y = JUMP_VELOCITY
 	velocity.x = -facing_direction * WALL_JUMP_PUSH_FORCE
 	animated_stripe.flip_h = true if facing_direction > 0 else false
-
+	
+#****************************************************************************
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_stripe.animation == "land":
 		state = State.NORMAL
 	elif animated_stripe.animation == "attack":
 		state = State.NORMAL
-#**************************************************************************
+
 func _on_cooldown_timer_timeout() -> void:
 	can_attack = true

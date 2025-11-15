@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://uyya6ys3jcib"]
+[gd_scene load_steps=11 format=3 uid="uid://uyya6ys3jcib"]
 
 [ext_resource type="Script" uid="uid://0f6005dsvtbu" path="res://scripts/slime.gd" id="1_4l1t8"]
 [ext_resource type="Texture2D" uid="uid://bbrnlxx0y0r4g" path="res://assets/sprites/slime_purple.png" id="1_5jc4t"]
@@ -43,7 +43,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4gyqm"]
 size = Vector2(7, 9)
 
-[node name="Slime" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4l1t8"]
+size = Vector2(14, 12)
+
+[node name="Slime" type="Node2D" groups=["Enemies"]]
 script = ExtResource("1_4l1t8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -69,3 +72,9 @@ position = Vector2(0, 4)
 target_position = Vector2(-11, 0)
 collision_mask = 4
 collide_with_areas = true
+
+[node name="DieZone" type="Area2D" parent="." groups=["Enemies"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DieZone"]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_4l1t8")
