@@ -10,7 +10,12 @@ extends CharacterBody2D
 @onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
 @onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
 
-@export_range(0, 1) var acceleration = 1
+# Attack system
+@onready var cooldown_timer: Timer = $CooldownTimer
+
+@onready var hitbox: Area2D = $hitbox
+
+@export_range(0, 1) var acceleration = 0.5
 @export_range(0, 1) var deceleration = 1
 @export_range(0, 1) var decelerate_on_jump_release = 0.5
 
@@ -21,7 +26,8 @@ enum State {
 	WALL_CLIMB,
 	WALL_SLIDE,
 	LANDED,
-	DEATH
+	DEATH,
+	ATTACK#**********************************************************************
 }
 
 var state = State.NORMAL
@@ -41,6 +47,8 @@ var facing_direction = 1 # Looking right by default
 var wall_direction = 0
 var elapsed_time = 0.0 # Time in seconds (delta is 1/60s)
 
+var can_attack = true#*****************************************************************
+
 var isCrouchBlocked = false
 
 var standing_collision_shape = preload("res://resources/collisions/player_standing.tres")
@@ -55,12 +63,14 @@ func die() -> void:
 		# Don't play death animation as he's falling
 		animated_stripe.play("death")
 
+
 func bounce(force: Vector2):
 	velocity = force
 	
 func _ready() -> void:
 	crouch_ray_cast_1.enabled = false
 	crouch_ray_cast_2.enabled = false
+	
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -77,13 +87,27 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0
 		move_and_slide()
 		return
+	
+	#*****************************************************************************
+	if state != State.ATTACK and state != State.DEATH:
+		if Input.is_action_just_pressed("attack") and can_attack:
+			state = State.ATTACK
+			can_attack = false
+			animated_stripe.play("attack")
+			cooldown_timer.start()
 			
+			# Check for enemies in hitbox area
+			var enemies = hitbox.get_overlapping_bodies()
+			for enemy in enemies:
+				if enemy.is_in_group("Enemies"):
+					if enemy.has_method("take_damage"):
+						enemy.take_damage(20)
+#******************************************************************
 	# Handle variable jump
 	if Input.is_action_just_released("jump") and velocity.y < 0:
 		velocity.y *= decelerate_on_jump_release
 	
 	# Get the input direction and handle the movement/deceleration
-	# As good practice, you should replace UI actions with custom gameplay actions
 	var direction := Input.get_axis("move_left", "move_right")
 	
 	match state:
@@ -163,18 +187,18 @@ func _physics_process(delta: float) -> void:
 				collision_shape.position = Vector2(0.0, -7.0)
 				isCrouchBlocked = false
 		State.WALL_CLIMB:
-			# wall_direction is -1 for up, and +1 for down
-			var wall_direction = direction
+			# local_wall_direction is -1 for up, and +1 for down
+			var local_wall_direction = direction
 			if facing_direction > 0:
 				# Climbing a right wall, we need to change the sign of the direction, left wall is kept unchanged
-				wall_direction = -direction
-				velocity.y = wall_direction * WALL_CLIMB_SPEED
+				local_wall_direction = -direction
+				velocity.y = local_wall_direction * WALL_CLIMB_SPEED
 			else:
-				velocity.y = wall_direction * WALL_CLIMB_SPEED
-			if wall_direction == 0:
+				velocity.y = local_wall_direction * WALL_CLIMB_SPEED
+			if local_wall_direction == 0:
 				animated_stripe.play("wall_crouch")
 			else:
-				if wall_direction > 0:
+				if local_wall_direction > 0:
 					state = State.WALL_SLIDE
 				else:
 					animated_stripe.play("wall_climb")
@@ -207,6 +231,10 @@ func _physics_process(delta: float) -> void:
 		State.LANDED:
 			# Changes back to normal state in _on_animated_sprite_2d_animation_finished
 			animated_stripe.play("land")
+			#*******************************************************************************
+		State.ATTACK:
+			velocity.x = move_toward(velocity.x, 0, SPEED * deceleration)
+			
 	
 	var was_on_floor = is_on_floor() 
 	
@@ -228,3 +256,8 @@ func wall_jump():
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_stripe.animation == "land":
 		state = State.NORMAL
+	elif animated_stripe.animation == "attack":
+		state = State.NORMAL
+#**************************************************************************
+func _on_cooldown_timer_timeout() -> void:
+	can_attack = true

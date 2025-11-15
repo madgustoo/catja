@@ -1,10 +1,11 @@
-[gd_scene load_steps=87 format=3 uid="uid://c2ow84qxmy37a"]
+[gd_scene load_steps=96 format=3 uid="uid://c2ow84qxmy37a"]
 
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://r5yddaw8hhcf" path="res://assets/sprites/player/cat05_idle_strip8.png" id="2_hqtel"]
 [ext_resource type="Shape2D" uid="uid://b4ob2bgretum0" path="res://resources/collisions/player_standing.tres" id="2_ivps1"]
 [ext_resource type="Texture2D" uid="uid://c017a3wr1dkxo" path="res://assets/sprites/player/cat05_jump_strip4.png" id="3_2hs0m"]
+[ext_resource type="Texture2D" uid="uid://dostvjitljirq" path="res://assets/sprites/player/cat05_attack_strip7.png" id="3_606se"]
 [ext_resource type="Texture2D" uid="uid://bsrqbhbmnftid" path="res://assets/sprites/player/cat05_run_strip4.png" id="3_hqtel"]
 [ext_resource type="Texture2D" uid="uid://cggn8tir85ip" path="res://assets/sprites/player/cat05_walk_strip8.png" id="3_sweqy"]
 [ext_resource type="Texture2D" uid="uid://cygvmb3ieudgp" path="res://assets/sprites/player/cat05_land_strip2.png" id="4_2hs0m"]
@@ -14,6 +15,34 @@
 [ext_resource type="Texture2D" uid="uid://ddtcfkfkbippg" path="res://assets/sprites/player/cat05_wallclimb_strip8.png" id="9_b26j0"]
 [ext_resource type="Texture2D" uid="uid://gyocjvdvjjdf" path="res://assets/sprites/player/cat05_sit_strip8.png" id="9_bwjto"]
 [ext_resource type="Texture2D" uid="uid://bvv25px2qw34i" path="res://assets/sprites/player/cat05_wallgrab_strip8.png" id="10_n7ghd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h6w8y"]
+atlas = ExtResource("3_606se")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yem3p"]
+atlas = ExtResource("3_606se")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jj5r"]
+atlas = ExtResource("3_606se")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_77e46"]
+atlas = ExtResource("3_606se")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cy2ki"]
+atlas = ExtResource("3_606se")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04cqw"]
+atlas = ExtResource("3_606se")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vihdy"]
+atlas = ExtResource("3_606se")
+region = Rect2(240, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
@@ -303,6 +332,32 @@ region = Rect2(280, 0, 40, 40)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_h6w8y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yem3p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0jj5r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_77e46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cy2ki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04cqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vihdy")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_iruf7")
 }],
 "loop": false,
@@ -585,6 +640,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_606se"]
+size = Vector2(10, 15)
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 5
 collision_mask = 14
@@ -600,8 +658,10 @@ shape = ExtResource("2_ivps1")
 texture_filter = 1
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"death"
+animation = &"attack"
 autoplay = "idle"
+frame = 1
+frame_progress = 0.84094
 
 [node name="RayCastDown" type="RayCast2D" parent="."]
 target_position = Vector2(0, 60)
@@ -626,5 +686,18 @@ rotation = 3.14159
 target_position = Vector2(-8.44002e-05, 12)
 collision_mask = 4
 
+[node name="hitbox" type="Area2D" parent="."]
+position = Vector2(14, -5)
+collision_layer = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+position = Vector2(-4, -6.5)
+shape = SubResource("RectangleShape2D_606se")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
