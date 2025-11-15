@@ -603,8 +603,8 @@ sprite_frames = SubResource("SpriteFrames_7ahtn")
 animation = &"death"
 autoplay = "idle"
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(0, 14)
+[node name="RayCastDown" type="RayCast2D" parent="."]
+target_position = Vector2(0, 60)
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 wait_time = 0.15

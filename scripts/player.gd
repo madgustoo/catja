@@ -1,12 +1,12 @@
 extends CharacterBody2D
 
 @onready var animated_stripe = $AnimatedSprite2D
-@onready var ray_cast_down: RayCast2D = $RayCast2D
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var camera: Camera2D = $Camera2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 
+@onready var ray_cast_down: RayCast2D = $RayCastDown
 @onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
 @onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
 
@@ -39,7 +39,7 @@ const WALL_JUMP_PUSH_FORCE = 120.0
 
 var facing_direction = 1 # Looking right by default
 var wall_direction = 0
-var elapsed_time = 0.0
+var elapsed_time = 0.0 # Time in seconds (delta is 1/60s)
 
 var isCrouchBlocked = false
 
@@ -51,7 +51,8 @@ func die() -> void:
 		return
 	state = State.DEATH
 	collision_shape.disabled = true
-	if velocity.y < MAX_FALL_SPEED:
+	if !ray_cast_down.is_colliding():
+		# Don't play death animation as he's falling
 		animated_stripe.play("death")
 
 func bounce(force: Vector2):
