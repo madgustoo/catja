@@ -1664,7 +1664,7 @@ text = "You have collected X coins. You can jump now"
 autowrap_mode = 2
 
 [node name="Player" parent="." instance=ExtResource("1_ig7tw")]
-position = Vector2(-527, -14)
+position = Vector2(-631, -10)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(0, -8)
@@ -1781,7 +1781,7 @@ position = Vector2(-318, 17)
 position = Vector2(-348, 102)
 
 [node name="Ball" parent="." instance=ExtResource("12_dg77c")]
-position = Vector2(-635, -43)
+position = Vector2(-632, -43)
 
 [node name="Ball2" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-864, -74)
@@ -1797,5 +1797,9 @@ shape = SubResource("RectangleShape2D_dg77c")
 
 [node name="Ball3" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-528, -71)
+scale = Vector2(2, 2)
+
+[node name="bird2" parent="." instance=ExtResource("11_efxa6")]
+position = Vector2(-246, -370)
 
 [editable path="bird"]

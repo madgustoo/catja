@@ -71,10 +71,11 @@ func _physics_process(delta: float) -> void:
 			# Apply down gravity
 			velocity += get_gravity() * delta
 		else:
-			# Make falling faster and caps at MAX_FALL_SPEED
-			velocity.y += FALL_GRAVITY * delta
-			if velocity.y > MAX_FALL_SPEED:
+			# Make falling faster and cap velocity.y at MAX_FALL_SPEED
+			if velocity.y >= MAX_FALL_SPEED:
 				velocity.y = MAX_FALL_SPEED
+			else:
+				velocity.y += FALL_GRAVITY * delta
 				
 	if state == State.DEATH:
 		velocity.x = 0
@@ -223,13 +224,25 @@ func _physics_process(delta: float) -> void:
 		
 	if !was_on_floor and is_on_floor() and not Input.is_action_pressed("sneak"):
 		state = State.LANDED
-	
+		
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
-		if c.get_collider() is RigidBody2D:
-			var rb = c.get_collider() as RigidBody2D
-			# Adjust the push force based on the object's mass, heavier object will move less 
-			rb.apply_impulse(-c.get_normal() * (PUSH_FORCE / rb.mass))
+		var rb := c.get_collider()
+
+		if rb is RigidBody2D:
+			var angle = deg_to_rad(30)
+			# 30° forward launch based on player facing direction
+			var launch_dir = Vector2(facing_direction, -1).normalized().rotated(angle)
+			rb.apply_impulse(launch_dir * PUSH_FORCE)
+	
+	#for i in get_slide_collision_count():
+		#var c = get_slide_collision(i)
+		#if c.get_collider() is RigidBody2D:
+			#var rb = c.get_collider() as RigidBody2D
+			#var angle = deg_to_rad(60)
+			## Adjust the push force based on the object's mass, heavier object will move less 
+			#rb.apply_impulse(-c.get_normal().rotated(angle) * (PUSH_FORCE / rb.mass), -c.get_normal())
+			##rb.apply_force(Vector2(400, 0))
 		
 func wall_jump():
 	state = State.NORMAL
