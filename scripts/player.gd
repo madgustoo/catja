@@ -9,6 +9,7 @@ extends CharacterBody2D
 @onready var ray_cast_down: RayCast2D = $RayCastDown
 @onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
 @onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
+@onready var debug_label: Label = $DebugLabel
 
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
@@ -36,6 +37,7 @@ const WALL_CLIMB_SPEED = 100.0
 const WALL_SLIDE_SPEED = 80.0
 const WALL_GRAVITY = 200.0
 const WALL_JUMP_PUSH_FORCE = 120.0
+const PUSH_FORCE = 20.0
 
 var facing_direction = 1 # Looking right by default
 var wall_direction = 0
@@ -50,10 +52,11 @@ func die() -> void:
 	if state == State.DEATH:
 		return
 	state = State.DEATH
+	animated_stripe.play("death")
 	collision_shape.disabled = true
-	if !ray_cast_down.is_colliding():
+	#if !ray_cast_down.is_colliding():
 		# Don't play death animation as he's falling
-		animated_stripe.play("death")
+		#animated_stripe.play("death")
 
 func bounce(force: Vector2):
 	velocity = force
@@ -213,11 +216,20 @@ func _physics_process(delta: float) -> void:
 	# This updates collision and floor detection, resets velocity, etc (to use methods like is_on_floor, etc)
 	move_and_slide()	
 	
+	debug_label.text = "Speed: %d" % velocity.length()
+	
 	if was_on_floor && !is_on_floor():
 		coyote_timer.start()
 		
 	if !was_on_floor and is_on_floor() and not Input.is_action_pressed("sneak"):
 		state = State.LANDED
+	
+	for i in get_slide_collision_count():
+		var c = get_slide_collision(i)
+		if c.get_collider() is RigidBody2D:
+			var rb = c.get_collider() as RigidBody2D
+			# Adjust the push force based on the object's mass, heavier object will move less 
+			rb.apply_impulse(-c.get_normal() * (PUSH_FORCE / rb.mass))
 		
 func wall_jump():
 	state = State.NORMAL

@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://c2ow84qxmy37a"]
+[gd_scene load_steps=88 format=3 uid="uid://c2ow84qxmy37a"]
 
 [ext_resource type="Script" uid="uid://j14xroy41xfx" path="res://scripts/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c5xpomj7iiwsv" path="res://assets/sprites/player/cat05_fall_strip3.png" id="2_1jxqw"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://ddtcfkfkbippg" path="res://assets/sprites/player/cat05_wallclimb_strip8.png" id="9_b26j0"]
 [ext_resource type="Texture2D" uid="uid://gyocjvdvjjdf" path="res://assets/sprites/player/cat05_sit_strip8.png" id="9_bwjto"]
 [ext_resource type="Texture2D" uid="uid://bvv25px2qw34i" path="res://assets/sprites/player/cat05_wallgrab_strip8.png" id="10_n7ghd"]
+[ext_resource type="FontFile" uid="uid://bu8sw67wna7op" path="res://assets/fonts/PixelOperator8.ttf" id="15_606se"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iruf7"]
 atlas = ExtResource("4_2hs0m")
@@ -587,7 +588,7 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 5
-collision_mask = 14
+collision_mask = 30
 script = ExtResource("1_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -600,7 +601,7 @@ shape = ExtResource("2_ivps1")
 texture_filter = 1
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_7ahtn")
-animation = &"death"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="RayCastDown" type="RayCast2D" parent="."]
@@ -625,6 +626,16 @@ position = Vector2(-6, -3)
 rotation = 3.14159
 target_position = Vector2(-8.44002e-05, 12)
 collision_mask = 4
+
+[node name="DebugLabel" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -28.0
+offset_right = 53.0
+offset_bottom = -5.0
+scale = Vector2(0.530658, 0.400001)
+theme_override_fonts/font = ExtResource("15_606se")
+theme_override_font_sizes/font_size = 8
+text = "Speed: 0"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

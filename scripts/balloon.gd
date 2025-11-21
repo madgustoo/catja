@@ -2,17 +2,18 @@ extends Area2D
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var timer: Timer = $Timer
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 @export var bounce_force := 400.0
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		animation_player.play("pop")
-		#print("Player: " + str(body.global_position))
-		#print("Balloon: " + str(global_position))
 		var dir = (body.global_position - global_position).normalized()
 		body.bounce(dir * bounce_force)
 		timer.start()
+		
 
 func _on_timer_timeout() -> void:
+	print("balloon reset")
 	animation_player.play("RESET")

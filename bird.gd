@@ -48,7 +48,8 @@ func _physics_process(delta: float) -> void:
 				state = State.FALLING
 		State.FALLING:
 			animated_sprite.play("flight")
-			if ray_cast_down.is_colliding():
+			# if ray_cast_down.is_colliding():
+			if is_on_floor():
 				state = State.NORMAL
 				
 	animated_sprite.flip_h = direction < 0

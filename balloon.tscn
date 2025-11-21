@@ -22,46 +22,22 @@ tracks/0/keys = {
 }
 tracks/1/type = "value"
 tracks/1/imported = false
-tracks/1/enabled = false
-tracks/1/path = NodePath("Pop:playing")
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
 "values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_r345k"]
 resource_name = "pop"
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("CollisionShape2D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -69,23 +45,23 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Pop:playing")
+tracks/1/path = NodePath("Pop:stream")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [ExtResource("3_4emby")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
-tracks/2/enabled = false
+tracks/2/enabled = true
 tracks/2/path = NodePath("AnimatedSprite2D:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
@@ -102,11 +78,11 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.166667),
+"times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"queue_free"
+"method": &"queue_redraw"
 }]
 }
 
@@ -170,34 +146,28 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="MovingBalloon" type="Node2D"]
-
-[node name="Balloon" type="Area2D" parent="."]
-collision_layer = 2
+[node name="MovingBalloon" type="Area2D"]
 script = ExtResource("1_r345k")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Balloon"]
-position = Vector2(-1, -9)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -9)
 rotation = -3.14159
-scale = Vector2(0.872504, 0.872504)
+scale = Vector2(0.9, 0.9)
 shape = SubResource("CircleShape2D_n2rxu")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Balloon"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_4emby")
 }
 autoplay = "up_and_down"
 
-[node name="Pop" type="AudioStreamPlayer2D" parent="Balloon"]
+[node name="Pop" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_4emby")
 bus = &"Sound effects"
 
-[node name="Timer" type="Timer" parent="Balloon"]
+[node name="Timer" type="Timer" parent="."]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Balloon"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_mv2x6")
 animation = &"dance"
 autoplay = "dance"
-
-[connection signal="body_entered" from="Balloon" to="Balloon" method="_on_body_entered"]
-[connection signal="timeout" from="Balloon/Timer" to="Balloon" method="_on_timer_timeout"]
