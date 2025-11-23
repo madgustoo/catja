@@ -1,11 +1,22 @@
-extends RigidBody2D
+extends CharacterBody2D
 
-func _integrate_forces(state):
-	for i in range(state.get_contact_count()):
-		var normal = state.get_contact_local_normal(i)
-		var collider = state.get_contact_collider_object(i)
+@export var mass: float = 0.8 # In kg 
 
-		# Hitting top of player: normal points upward (> 0.7)
-		if collider.name == "Player" and normal.y > 0.7:
-			print("Bong")
-			# linear_velocity.y = -abs(linear_velocity.y)  # force upward bounce
+const SPEED = 100.0
+
+#func _ready() -> void:
+	#velocity = Vector2(SPEED * -1, SPEED)
+
+func _physics_process(delta: float) -> void:
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+	var collision = move_and_collide(velocity * delta)
+	if collision:
+		# var collider = collision.get_collider()
+		velocity = velocity.bounce(collision.get_normal())
+		
+func hit(force: Vector2):
+	print(force)
+	velocity += force / mass
+	

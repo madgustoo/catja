@@ -1781,7 +1781,7 @@ position = Vector2(-318, 17)
 position = Vector2(-348, 102)
 
 [node name="Ball" parent="." instance=ExtResource("12_dg77c")]
-position = Vector2(-632, -43)
+position = Vector2(-582, -16)
 
 [node name="Ball2" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-864, -74)
@@ -1796,7 +1796,7 @@ position = Vector2(-34.8982, 0)
 shape = SubResource("RectangleShape2D_dg77c")
 
 [node name="Ball3" parent="." instance=ExtResource("12_dg77c")]
-position = Vector2(-528, -71)
+position = Vector2(-528, -20)
 scale = Vector2(2, 2)
 
 [node name="bird2" parent="." instance=ExtResource("11_efxa6")]

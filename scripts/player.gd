@@ -5,11 +5,14 @@ extends CharacterBody2D
 @onready var camera: Camera2D = $Camera2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
+@onready var hit_box: Area2D = $HitBox
 
 @onready var ray_cast_down: RayCast2D = $RayCastDown
 @onready var crouch_ray_cast_1: RayCast2D = $CrouchRayCast1
 @onready var crouch_ray_cast_2: RayCast2D = $CrouchRayCast2
 @onready var debug_label: Label = $DebugLabel
+@onready var cool_down_attack_timer: Timer = $CoolDownAttackTimer
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 @export_range(0, 1) var acceleration = 1
 @export_range(0, 1) var deceleration = 1
@@ -22,7 +25,8 @@ enum State {
 	WALL_CLIMB,
 	WALL_SLIDE,
 	LANDED,
-	DEATH
+	DEATH,
+	ATTACK
 }
 
 var state = State.NORMAL
@@ -38,6 +42,7 @@ const WALL_SLIDE_SPEED = 80.0
 const WALL_GRAVITY = 200.0
 const WALL_JUMP_PUSH_FORCE = 120.0
 const PUSH_FORCE = 20.0
+const HIT_STRENGTH = 200.0
 
 var facing_direction = 1 # Looking right by default
 var wall_direction = 0
@@ -102,6 +107,11 @@ func _physics_process(delta: float) -> void:
 					velocity.y = JUMP_VELOCITY
 					animated_stripe.play("jump")
 					elapsed_time = 0
+				elif Input.is_action_just_pressed("attack"):
+					state = State.ATTACK
+					animation_player.play("attack")
+					animated_stripe.play("attack")
+					elapsed_time = 0
 				elif Input.is_action_pressed("sneak"):
 					state = State.SNEAK
 					elapsed_time = 0
@@ -111,6 +121,10 @@ func _physics_process(delta: float) -> void:
 					animated_stripe.play("run")
 					facing_direction = sign(direction)
 					elapsed_time = 0
+					if animated_stripe.flip_h:
+						hit_box.position.x = -18
+					else:
+						hit_box.position.x = 0
 				else:
 					velocity.x = move_toward(velocity.x, 0, SPEED * deceleration)
 					if abs(velocity.x) == 0:
@@ -253,3 +267,15 @@ func wall_jump():
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_stripe.animation == "land":
 		state = State.NORMAL
+	elif animated_stripe.animation == "attack":
+		state = State.NORMAL
+		animation_player.play("RESET")
+		
+#func _on_cool_down_attack_timer_timeout() -> void:
+	#canAttack = true
+
+func _on_hit_box_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Ball"):
+		var facing_direction_vector = Vector2(facing_direction, 0)
+		var force = facing_direction_vector.rotated(deg_to_rad(45))
+		body.hit(force * HIT_STRENGTH)
