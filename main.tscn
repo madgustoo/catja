@@ -1782,6 +1782,7 @@ position = Vector2(-348, 102)
 
 [node name="Ball" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-582, -16)
+damping = 0.98
 
 [node name="Ball2" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-864, -74)
@@ -1798,6 +1799,8 @@ shape = SubResource("RectangleShape2D_dg77c")
 [node name="Ball3" parent="." instance=ExtResource("12_dg77c")]
 position = Vector2(-528, -20)
 scale = Vector2(2, 2)
+mass = 2.0
+damping = 0.98
 
 [node name="bird2" parent="." instance=ExtResource("11_efxa6")]
 position = Vector2(-246, -370)

@@ -5,5 +5,5 @@
 [node name="MainBallScene" type="Node2D"]
 
 [node name="Ball" parent="." instance=ExtResource("1_e266h")]
-mass = 0.8
-mass = 0.8
+mass = 1.0
+mass = 1.0

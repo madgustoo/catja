@@ -1,11 +1,9 @@
 extends CharacterBody2D
 
-@export var mass: float = 0.8 # In kg 
+@export var mass: float = 1 # In kg 
+@export_range(0, 1) var damping: float = 0.8 # Damping (like friction) to reduce the movement overtime
 
 const SPEED = 100.0
-
-#func _ready() -> void:
-	#velocity = Vector2(SPEED * -1, SPEED)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -13,10 +11,9 @@ func _physics_process(delta: float) -> void:
 	
 	var collision = move_and_collide(velocity * delta)
 	if collision:
-		# var collider = collision.get_collider()
 		velocity = velocity.bounce(collision.get_normal())
+		velocity *= damping
 		
 func hit(force: Vector2):
-	print(force)
 	velocity += force / mass
 	

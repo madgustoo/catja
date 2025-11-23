@@ -42,7 +42,7 @@ const WALL_SLIDE_SPEED = 80.0
 const WALL_GRAVITY = 200.0
 const WALL_JUMP_PUSH_FORCE = 120.0
 const PUSH_FORCE = 20.0
-const HIT_STRENGTH = 200.0
+const HIT_STRENGTH = 300.0
 
 var facing_direction = 1 # Looking right by default
 var wall_direction = 0
@@ -212,7 +212,7 @@ func _physics_process(delta: float) -> void:
 					state = State.WALL_CLIMB
 				elif Input.is_action_pressed("move_left"):
 					# Make descend faster
-					velocity.y *= 1.5
+					velocity.y *= 2
 			else:
 				# Climbing a left wall
 				if Input.is_action_just_pressed("move_left"):
