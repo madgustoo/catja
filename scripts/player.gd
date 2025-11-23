@@ -37,7 +37,7 @@ const JUMP_VELOCITY = -320.0
 const WALL_JUMP_VELOCITY = -250.0
 const FALL_GRAVITY = 1000
 const SNEAK_SPEED = 60.0
-const WALL_CLIMB_SPEED = 100.0
+const WALL_CLIMB_SPEED = 120.0
 const WALL_SLIDE_SPEED = 80.0
 const WALL_GRAVITY = 200.0
 const WALL_JUMP_PUSH_FORCE = 120.0
@@ -90,6 +90,12 @@ func _physics_process(delta: float) -> void:
 	# Handle variable jump
 	if Input.is_action_just_released("jump") and velocity.y < 0:
 		velocity.y *= decelerate_on_jump_release
+		
+	# Change hit box position according to player's facing direction
+	if animated_stripe.flip_h:
+		hit_box.position.x = -18
+	else:
+		hit_box.position.x = 0
 	
 	# Get the input direction and handle the movement/deceleration
 	# As good practice, you should replace UI actions with custom gameplay actions
@@ -121,10 +127,6 @@ func _physics_process(delta: float) -> void:
 					animated_stripe.play("run")
 					facing_direction = sign(direction)
 					elapsed_time = 0
-					if animated_stripe.flip_h:
-						hit_box.position.x = -18
-					else:
-						hit_box.position.x = 0
 				else:
 					velocity.x = move_toward(velocity.x, 0, SPEED * deceleration)
 					if abs(velocity.x) == 0:
@@ -210,7 +212,7 @@ func _physics_process(delta: float) -> void:
 					state = State.WALL_CLIMB
 				elif Input.is_action_pressed("move_left"):
 					# Make descend faster
-					velocity.y *= 2
+					velocity.y *= 1.5
 			else:
 				# Climbing a left wall
 				if Input.is_action_just_pressed("move_left"):
@@ -239,16 +241,16 @@ func _physics_process(delta: float) -> void:
 	if !was_on_floor and is_on_floor() and not Input.is_action_pressed("sneak"):
 		state = State.LANDED
 		
-	for i in get_slide_collision_count():
-		var c = get_slide_collision(i)
-		var rb := c.get_collider()
+	#for i in get_slide_collision_count():
+		#var c = get_slide_collision(i)
+		#var rb := c.get_collider()
+#
+		#if rb is RigidBody2D:
+			#var angle = deg_to_rad(30)
+			## 30° forward launch based on player facing direction
+			#var launch_dir = Vector2(facing_direction, -1).normalized().rotated(angle)
+			#rb.apply_impulse(launch_dir * PUSH_FORCE)
 
-		if rb is RigidBody2D:
-			var angle = deg_to_rad(30)
-			# 30° forward launch based on player facing direction
-			var launch_dir = Vector2(facing_direction, -1).normalized().rotated(angle)
-			rb.apply_impulse(launch_dir * PUSH_FORCE)
-	
 	#for i in get_slide_collision_count():
 		#var c = get_slide_collision(i)
 		#if c.get_collider() is RigidBody2D:
